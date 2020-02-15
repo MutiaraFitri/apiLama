@@ -8,3 +8,13 @@ exports.ok = function(values, res) {
   res.json(data);
   res.end();
 };
+
+exports.api_kosong = (res) => {
+  var data = {
+      'status': 203,
+      'message': "API Key not valid",
+      'values': null
+  };
+  res.json(data);
+  res.end();
+};

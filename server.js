@@ -1,10 +1,11 @@
 var createError = require('http-errors');
 var express = require('express'),
     app = express(),
-    port = process.env.PORT || 3000,
+    port = process.env.PORT || 3001,
     bodyParser = require('body-parser'),
     controller = require('./controller');
 var logger = require('morgan');
+var routes = require('./routes');
 
 app.use(logger('dev'));
 // app.use(function(req, res, next) {
@@ -13,7 +14,6 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./routes');
 routes(app);
 
 app.listen(port);
