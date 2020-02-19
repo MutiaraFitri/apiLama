@@ -9,6 +9,20 @@ var check = (req,res) => {
     }
 }
 
+exports.tickets = function(req, res) {
+    if(check(req,res)){
+        connection.query('SELECT * FROM tickets', function (error, rows, fields){
+            if(error){
+                console.log(error)
+            } else{
+                response.ok(rows, res)
+            }
+        });
+    }
+    else {
+        response.api_kosong(res)
+    }
+};
 exports.users = function(req, res) {
     if(check(req,res)){
         connection.query('SELECT * FROM employees', function (error, rows, fields){
@@ -43,6 +57,24 @@ exports.findUsers = function(req, res) {
     });
 };
 
+exports.createTicket = function(req, res) {
+    
+    var title = req.body.title;
+    var category = req.body.category;
+    var due_date = req.body.due_date;
+    var description = req.body.description;
+    var image = req.body.image;
+
+    connection.query('INSERT INTO tickets (title, due_date,image,category,description) values (?,?,?,?,?)',
+    [ title, due_date, image, category,description ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok("Berhasil menambahkan user!", res)
+        }
+    });
+};
 exports.createUsers = function(req, res) {
     
     var first_name = req.body.first_name;

@@ -6,12 +6,16 @@ module.exports = function (app) {
     app.route('/')
         .get(todoList.index);
 
+    app.route('/tickets')
+        .get(todoList.tickets);
     app.route('/users')
         .get(todoList.users);
         
     app.route('/users/:user_id')
         .get(todoList.findUsers);
 
+    app.route('/tickets')
+        .post(todoList.createTicket);
     app.route('/users')
         .post(todoList.createUsers);
 
