@@ -187,3 +187,93 @@ exports.deleteUsers = function (req, res) {
             }
         });
 };
+
+
+// TECHNICIAN USERS CRUD
+exports.technician = function (req, res) {
+    if (check(req, res)) {
+        connection.query('SELECT * FROM technician', function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+            } else {
+                response.ok(rows, res)
+            }
+        });
+    }
+    else {
+        response.api_kosong(res)
+    }
+};
+
+
+exports.findTechnician = function (req, res) {
+
+    var id_technician = req.params.id_technician;
+
+    connection.query('SELECT * FROM technician where id_technician = ?',
+        [id_technician],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+            } else {
+                response.ok(rows, res)
+            }
+        });
+};
+exports.createTechnician = function (req, res) {
+
+    var first_name = req.body.first_name;
+    var last_name = req.body.last_name;
+    var nrp = req.body.nrp;
+    var email = req.body.email;
+    var departement = req.body.departement;
+    var skill = req.body.skill;
+    var phone_number = req.body.phone_number;
+
+    connection.query('INSERT INTO technician (first_name, last_name,nrp,  email,departement,skill,phone_number) values (?,?,?,?,?,?,?)',
+        [first_name, last_name, nrp, email, departement, skill, phone_number],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+            } else {
+                response.ok("Berhasil menambahkan technician!", res)
+            }
+        });
+};
+
+
+exports.updateTechnician = function (req, res) {
+
+    var user_id = req.body.user_id;
+    var first_name = req.body.first_name;
+    var last_name = req.body.last_name;
+    var email = req.body.email;
+    var departement = req.body.departement;
+    var skill = req.body.skill;
+    var phone_number = req.body.phone_number;
+
+    connection.query('UPDATE technician SET first_name = ?, last_name = ? email =?, departement=?, skill=?, phone_number=? WHERE id_technician = ?',
+        [first_name, last_name, id_technician, email, departement, skill, phone_number],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+            } else {
+                response.ok("Berhasil merubah technician!", res)
+            }
+        });
+};
+
+exports.deleteTechnician = function (req, res) {
+
+    var id_technician = req.body.id_technician;
+
+    connection.query('DELETE FROM technician WHERE id_technician = ?',
+        [id_technician],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+            } else {
+                response.ok("Berhasil menghapus technician!", res)
+            }
+        });
+};
