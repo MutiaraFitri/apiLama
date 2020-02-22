@@ -1,4 +1,5 @@
 var createError = require('http-errors');
+var cors = require('cors');
 var express = require('express'),
     app = express(),
     port = process.env.PORT || 3001,
@@ -7,6 +8,7 @@ var express = require('express'),
 var logger = require('morgan');
 var routes = require('./routes');
 
+app.use(cors());
 app.use(logger('dev'));
 // app.use(function(req, res, next) {
 //     next(createError(404));
