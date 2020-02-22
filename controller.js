@@ -45,7 +45,6 @@ exports.findTicket = function (req, res) {
         });
 };
 exports.createTicket = function (req, res) {
-
     var title = req.body.title;
     var category = req.body.category;
     var status = req.body.status;
@@ -64,7 +63,7 @@ exports.createTicket = function (req, res) {
             if (error) {
                 console.log(error)
             } else {
-                response.ok("Berhasil menambahkan user!", res)
+                response.ok("Berhasil menambahkan ticket!", res)
             }
         });
 };
