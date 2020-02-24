@@ -14,7 +14,10 @@ app.use(logger('dev'));
 //     next(createError(404));
 //   });
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    parameterLimit: 100000,
+    limit: '50mb'
+  }));
 
 routes(app);
 

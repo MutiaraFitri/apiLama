@@ -1,7 +1,21 @@
 'use strict';
 
 var response = require('./res');
+const path = require("path");
+const multer = require("multer");
 var connection = require('./conn');
+
+const storage = multer.diskStorage({
+    destination: "./public/uploads/",
+    filename: function (req, file, cb) {
+        cb(null, "img-" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 },
+}).single("myImage");
 
 var check = (req, res) => {
     if (req.get('ApiKey')) {
@@ -44,29 +58,62 @@ exports.findTicket = function (req, res) {
             }
         });
 };
-exports.createTicket = function (req, res) {
-    var title = req.body.title;
-    var category = req.body.category;
-    var status = req.body.status;
-    var priority = req.bodypriority;
-    var sender = req.body.sender;
-    var assign_to = req.body.assign_to;
-    var due_date = req.body.due_date;
-    var description = req.body.description;
-    var image = req.body.image;
-    var location = req.body.location;
-    var detail = req.body.detail;
+// exports.createTicket = function (req, res) {
+//     var title = req.body.title;
+//     var category = req.body.category;
+//     var status = req.body.status;
+//     var priority = req.bodypriority;
+//     var sender = req.body.sender;
+//     var assign_to = req.body.assign_to;
+//     var due_date = req.body.due_date;
+//     var description = req.body.description;
+//     var image = req.body.image;
+//     var location = req.body.location;
+//     var detail = req.body.detail;
 
-    connection.query('INSERT INTO tickets (title, due_date,image,category,description,status,priority,sender,assign_to,location,detail) values (?,?,?,?,?,?,?,?,?,?,?)',
-        [title, due_date, image, category, description, status, priority, sender, assign_to, location, detail],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error)
-            } else {
-                response.ok("Berhasil menambahkan ticket!", res)
-            }
-        });
+//     connection.query('INSERT INTO tickets (title, due_date,image,category,description,status,priority,sender,assign_to,location,detail) values (?,?,?,?,?,?,?,?,?,?,?)',
+//         [title, due_date, image, category, description, status, priority, sender, assign_to, location, detail],
+//         function (error, rows, fields) {
+//             if (error) {
+//                 console.log(error)
+//             } else {
+//                 response.ok("Berhasil menambahkan ticket!", res)
+//             }
+//         });
+// };
+
+exports.createTicket = function (req, res) {
+    upload(req, res, (err) => {
+        // console.log("Request ---", req.body);
+        // console.log("Request file ---", req.file.filename);//Here you get file.
+
+        var title = req.body.title;
+        var category = req.body.category;
+        var status = req.body.status;
+        var priority = req.bodypriority;
+        var sender = req.body.sender;
+        var assign_to = req.body.assign_to;
+        var due_date = req.body.due_date;
+        var description = req.body.description;
+        var image = req.file.filename;
+        var location = req.body.location;
+        var detail = req.body.detail;
+        var ticket_timestamp = new Date();
+        /*Now do where ever you want to do*/
+        if (!err)
+            connection.query('INSERT INTO tickets (title, due_date,image,category,description,status,priority,sender,assign_to,location,detail,ticket_timestamp) values (?,?,?,?,?,?,?,?,?,?,?,?)',
+                [title, due_date, image, category, description, status, priority, sender, assign_to, location, detail,ticket_timestamp],
+                function (error, rows, fields) {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        response.ok("Berhasil menambahkan ticket!", res)
+                    }
+                });
+        // return res.send(200).end();
+    });
 };
+
 exports.updateTicket = function (req, res) {
 
     var title = req.body.title;
