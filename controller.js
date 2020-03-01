@@ -73,7 +73,7 @@ exports.createTicket = function (req, res) {
         var detail = req.body.detail;
         var location = req.body.location;
         var image = req.file.filename;
-        var ticket_timestamp = new Date();
+        var ticket_timestamp = Date(req.body.time);
         var employee_id = req.body.user_id;
         /*Now do where ever you want to do*/
         if (!err)
