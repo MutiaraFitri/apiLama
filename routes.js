@@ -1,55 +1,59 @@
 'use strict';
 
 module.exports = function (app) {
-    var todoList = require('./controller');
+    var controller = require('./controller');
 
     app.route('/')
-        .get(todoList.index);
+        .get(controller.index);
 
     app.route('/users')
-        .get(todoList.users);
+        .get(controller.users);
 
     app.route('/users/:user_id')
-        .get(todoList.findUsers);
+        .get(controller.findUsers);
 
     app.route('/users')
-        .post(todoList.createUsers);
+        .post(controller.createUsers);
 
     app.route('/users')
-        .put(todoList.updateUsers);
+        .put(controller.updateUsers);
 
     app.route('/users')
-        .delete(todoList.deleteUsers);
+        .delete(controller.deleteUsers);
 
     //ticket table
     app.route('/tickets')
-        .get(todoList.tickets)
+        .get(controller.tickets)
 
     app.route('/users/:id_ticket')
-        .get(todoList.findTicket);
+        .get(controller.findTicket);
 
     app.route('/tickets')
-        .post(todoList.createTicket);
+        .post(controller.createTicket);
 
     app.route('/tickets')
-        .put(todoList.updateTicket);
+        .put(controller.updateTicket);
 
     app.route('/tickets')
-        .delete(todoList.deleteTicket);
+        .delete(controller.deleteTicket);
 
     //technician table
     app.route('/technician')
-        .get(todoList.technician)
+        .get(controller.technician)
 
     app.route('/users/:technician')
-        .get(todoList.findTechnician);
+        .get(controller.findTechnician);
 
     app.route('/technician')
-        .post(todoList.createTechnician);
+        .post(controller.createTechnician);
 
     app.route('/technician')
-        .put(todoList.updateTechnician);
+        .put(controller.updateTechnician);
 
     app.route('/technician')
-        .delete(todoList.deleteTechnician);
+        .delete(controller.deleteTechnician);
+
+    app.route('/login')
+        .post(controller.login);
+
 };

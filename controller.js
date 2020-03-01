@@ -4,6 +4,7 @@ var response = require('./res');
 const path = require("path");
 const multer = require("multer");
 var connection = require('./conn');
+const jwt = require('jsonwebtoken');
 
 const storage = multer.diskStorage({
     destination: "./public/uploads/",
@@ -58,51 +59,26 @@ exports.findTicket = function (req, res) {
             }
         });
 };
-// exports.createTicket = function (req, res) {
-//     var title = req.body.title;
-//     var category = req.body.category;
-//     var status = req.body.status;
-//     var priority = req.bodypriority;
-//     var sender = req.body.sender;
-//     var assign_to = req.body.assign_to;
-//     var due_date = req.body.due_date;
-//     var description = req.body.description;
-//     var image = req.body.image;
-//     var location = req.body.location;
-//     var detail = req.body.detail;
-
-//     connection.query('INSERT INTO tickets (title, due_date,image,category,description,status,priority,sender,assign_to,location,detail) values (?,?,?,?,?,?,?,?,?,?,?)',
-//         [title, due_date, image, category, description, status, priority, sender, assign_to, location, detail],
-//         function (error, rows, fields) {
-//             if (error) {
-//                 console.log(error)
-//             } else {
-//                 response.ok("Berhasil menambahkan ticket!", res)
-//             }
-//         });
-// };
-
 exports.createTicket = function (req, res) {
     upload(req, res, (err) => {
         // console.log("Request ---", req.body);
         // console.log("Request file ---", req.file.filename);//Here you get file.
 
-        var title = req.body.title;
         var category = req.body.category;
+        var description = req.body.description;
+        var due_date = req.body.due_date;
+        var title = req.body.title;
         var status = req.body.status;
         var priority = req.bodypriority;
-        var sender = req.body.sender;
-        var assign_to = req.body.assign_to;
-        var due_date = req.body.due_date;
-        var description = req.body.description;
-        var image = req.file.filename;
-        var location = req.body.location;
         var detail = req.body.detail;
+        var location = req.body.location;
+        var image = req.file.filename;
         var ticket_timestamp = new Date();
+        var employee_id = req.body.sender;
         /*Now do where ever you want to do*/
         if (!err)
-            connection.query('INSERT INTO tickets (title, due_date,image,category,description,status,priority,sender,assign_to,location,detail,ticket_timestamp) values (?,?,?,?,?,?,?,?,?,?,?,?)',
-                [title, due_date, image, category, description, status, priority, sender, assign_to, location, detail,ticket_timestamp],
+            connection.query('INSERT INTO tickets (category,description,due_date,title,status,priority,detail,location,image,ticket_timestamp,isActive,sender,assign_to,) values (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                [category,description,due_date,title, status,priority,detail,location,image, ticket_timestamp,1,employee_id, null ],
                 function (error, rows, fields) {
                     if (error) {
                         console.log(error)
@@ -116,17 +92,17 @@ exports.createTicket = function (req, res) {
 
 exports.updateTicket = function (req, res) {
 
-    var title = req.body.title;
     var category = req.body.category;
+    var description = req.body.description;
+    var due_date = req.body.due_date;
+    var title = req.body.title;
     var status = req.body.status;
     var priority = req.bodypriority;
+    var detail = req.body.detail;
+    var location = req.body.location;
     var sender = req.body.sender;
     var assign_to = req.body.assign_to;
-    var due_date = req.body.due_date;
-    var description = req.body.description;
     var image = req.body.image;
-    var location = req.body.location;
-    var detail = req.body.detail;
 
     connection.query('UPDATE ticket SET title=?, due_date=?, image=?, category=?, description=?, status=?, priority=?, sender=?, assign_to,location= ? detail = ? WHERE id_ticket = ?',
         [title, due_date, image, category, description, status, priority, sender, assign_to, location, detail],
@@ -174,7 +150,7 @@ exports.findUsers = function (req, res) {
 
     var user_id = req.params.user_id;
 
-    connection.query('SELECT * FROM employees where id = ?',
+    connection.query('SELECT * FROM users where user_id = ?',
         [user_id],
         function (error, rows, fields) {
             if (error) {
@@ -305,6 +281,28 @@ exports.updateTechnician = function (req, res) {
                 console.log(error)
             } else {
                 response.ok("Berhasil merubah technician!", res)
+            }
+        });
+};
+
+exports.login = function (req, res) {
+
+    var employeeId = req.body.employeeId;
+    var password = req.body.password;
+    // console.log("employeeid", employeeId)
+    // console.log("password", password)
+
+    connection.query('SELECT * FROM users WHERE user_employees_id = ? AND user_password = ?',
+        [employeeId, password],
+        function (error, users, fields) {
+            if (error) {
+                console.log(error)
+            }
+            else if(users.length==0){
+                response.ok( {data:"kosong"}, res)
+            } else {
+                const token = jwt.sign({ sub: employeeId }, "fuckyou");
+                response.ok( {userId:users[0].user_id,jwt:token}, res)
             }
         });
 };
