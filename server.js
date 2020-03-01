@@ -7,7 +7,7 @@ var express = require('express'),
     controller = require('./controller');
 var logger = require('morgan');
 var routes = require('./routes');
-
+app.use(express.static('public'))
 app.use(cors());
 app.use(logger('dev'));
 // app.use(function(req, res, next) {
