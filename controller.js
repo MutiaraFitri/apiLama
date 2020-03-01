@@ -74,7 +74,7 @@ exports.createTicket = function (req, res) {
         var location = req.body.location;
         var image = req.file.filename;
         var ticket_timestamp = new Date();
-        var employee_id = localStorage.getItem("userId");
+        var employee_id = req.body.user_id;
         /*Now do where ever you want to do*/
         if (!err)
             connection.query('INSERT INTO tickets (category,description,due_date,title,status,priority,detail,location,image,ticket_timestamp,ticket_employee_id,ticket_technician_id,is_active) values (?,?,?,?,?,?,?,?,?,?,?,?,?)',
