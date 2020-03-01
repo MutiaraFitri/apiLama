@@ -77,7 +77,7 @@ exports.createTicket = function (req, res) {
         var employee_id = req.body.sender;
         /*Now do where ever you want to do*/
         if (!err)
-            connection.query('INSERT INTO tickets (category,description,due_date,title,status,priority,detail,location,image,ticket_timestamp,isActive,sender,assign_to,) values (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            connection.query('INSERT INTO tickets (category,description,due_date,title,status,priority,detail,location,image,ticket_timestamp,sender,ticket_employee_id,ticket_technician_id,is_active) values (?,?,?,?,?,?,?,?,?,?,?,?,?)',
                 [category,description,due_date,title, status,priority,detail,location,image, ticket_timestamp,1,employee_id, null ],
                 function (error, rows, fields) {
                     if (error) {
