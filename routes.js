@@ -41,15 +41,15 @@ module.exports = function (app) {
     app.route('/technician')
         .get(todoList.technician)
 
-    app.route('/users/:technician')
+    app.route('/technician/:id_technician')
         .get(todoList.findTechnician);
 
-    app.route('/technician')
+    app.route('/technician/:id_technician')
         .post(todoList.createTechnician);
 
-    app.route('/technician')
+    app.route('/technician/:id_technician')
         .put(todoList.updateTechnician);
 
-    app.route('/technician')
+    app.route('/technician/:id_technician')
         .delete(todoList.deleteTechnician);
 };
