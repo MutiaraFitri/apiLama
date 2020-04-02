@@ -7,14 +7,17 @@ var express = require('express'),
     controller = require('./controller');
 var logger = require('morgan');
 var routes = require('./routes');
-
+app.use(express.static('public'))
 app.use(cors());
 app.use(logger('dev'));
 // app.use(function(req, res, next) {
 //     next(createError(404));
 //   });
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    parameterLimit: 100000,
+    limit: '50mb'
+  }));
 
 routes(app);
 
